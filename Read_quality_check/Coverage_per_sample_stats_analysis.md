@@ -150,6 +150,8 @@ for (file in files_list) {
   table_input$Name <- sample_name
   table_input$Ref_nuc_span <- c(table_input[,3]-table_input[,2])
   table_input <- table_input[,-c(1:3)]
+  # Remove bases with 0 coverage
+  table_input <- table_input[which(table_input$Coverage!=0),]
   # Add column containing multiplecation of coverage times nucleotides in block to get total nucleotides derived
   # from sample reads, mapped over that area
   table_input$Samp_nucs_mapped <- c(table_input$Coverage*table_input$Ref_nuc_span)
