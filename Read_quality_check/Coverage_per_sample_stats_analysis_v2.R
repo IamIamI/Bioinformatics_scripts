@@ -17,8 +17,7 @@ install_load <- function(Required_Packages) {
 
 #Install and load the following packages
 install_load(c("plyr"))
-remove.packages("yaml")
-install_load(c("yaml"))
+
 #Load a folder of files generated with 
 files_list <- list.files(path=choose.dir(), pattern="*.tsv", full.names=TRUE, recursive=FALSE)
 read_file <- read.csv(file.choose(), sep="\t", na.strings=c("","NA"), header = FALSE)
@@ -44,6 +43,7 @@ for (file in files_list) {
   table_input$Name <- sample_name
   table_input$Ref_nuc_span <- c(table_input[,3]-table_input[,2])
   table_input <- table_input[,-c(1:3)]
+  table_input <- table_input[which(table_input$Coverage!=0),]
   #add column containing multiplecation of coverage times nucleotides in block to get total coverage over that area
   table_input$Samp_nucs_mapped <- c(table_input$Coverage*table_input$Ref_nuc_span)
   
@@ -99,14 +99,14 @@ colnames(coverage_distro) <- c("Name","Coverage","Frequency")
 # The first plot generates the coverage distribution per sample, so these will be 100 little plots in one
 pdf("Coverage_distributions.pdf", width=18,height=14)
 p1 <-   ggplot(coverage_distro, aes(x=Coverage, y=Frequency, group=Name, fill=Name)) +
-        geom_area() +
-#        scale_fill_viridis(discrete = TRUE) +
-        scale_x_continuous(limit=c(0,30)) +
-        theme(legend.position="none") +
-        theme(legend.position="none",
-              panel.spacing = unit(0.1, "lines"),
-              strip.text.x = element_text(size = 8)) +
-        facet_wrap(~Name, scale="free_y")
+  geom_area() +
+  #        scale_fill_viridis(discrete = TRUE) +
+  scale_x_continuous(limit=c(0,30)) +
+  theme(legend.position="none") +
+  theme(legend.position="none",
+        panel.spacing = unit(0.1, "lines"),
+        strip.text.x = element_text(size = 8)) +
+  facet_wrap(~Name, scale="free_y")
 p1
 dev.off()
 
@@ -114,69 +114,76 @@ dev.off()
 pdf("Sample_read_quality.pdf", width=18,height=12)
 # The following plots will generate our barcharts and median lines, as well as additional information we added
 plot1 <-  average_coverage_data2 %>%
-          select(Name, Ref_nuc_span  ) %>%
-          na.omit() %>%
-          ggplot() +
-          geom_bar(aes(x = Name, y = Ref_nuc_span  ), stat = "identity", alpha = 0.75, fill = "palegreen3") +
-          ylab("Chrom Nuc covered") +
-          geom_errorbar(data=average_coverage_data2, aes(Name, ymax = Mean_ref_nuc_span, ymin = Mean_ref_nuc_span),
-                        size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
-          theme_minimal() +
-          theme(axis.title.x = element_blank(),
-                axis.text.x = element_blank())
+  select(Name, Ref_nuc_span  ) %>%
+  na.omit() %>%
+  ggplot() +
+  geom_bar(aes(x = Name, y = Ref_nuc_span  ), stat = "identity", alpha = 0.75, fill = "palegreen3") +
+  ylab("Chrom Nuc covered") +
+  geom_errorbar(data=average_coverage_data2, aes(Name, ymax = Mean_ref_nuc_span, ymin = Mean_ref_nuc_span),
+                size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
+  theme_minimal() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank())
 
 plot2 <-  average_coverage_tmp %>%
-          select(Name, Samp_nucs_mapped,label) %>%
-          na.omit() %>%
-          ggplot() +
-          geom_bar(aes(x = Name, y = Samp_nucs_mapped , fill=label), stat = "identity", position=position_dodge()) +
-          ylab("Read Nucs mapped") +
-          geom_errorbar(data=average_coverage_tmp, aes(Name, ymax = Mean_Samp_nucs_mapped, ymin = Mean_Samp_nucs_mapped),
-                        size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
-          scale_fill_brewer(palette="Accent")+
-          theme_minimal() +
-          guides(shape = guide_legend(override.aes = list(size = 100)),
-                 color = guide_legend(override.aes = list(size = 100))) +
-          theme(axis.title.x = element_blank(),
-                axis.text.x = element_blank(),
+  select(Name, Samp_nucs_mapped,label) %>%
+  na.omit() %>%
+  ggplot() +
+  geom_bar(aes(x = Name, y = Samp_nucs_mapped , fill=label), stat = "identity", position=position_dodge()) +
+  ylab("Read Nucs mapped") +
+  geom_errorbar(data=average_coverage_tmp, aes(Name, ymax = Mean_Samp_nucs_mapped, ymin = Mean_Samp_nucs_mapped),
+                size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
+  scale_fill_brewer(palette="Accent")+
+  theme_minimal() +
+  guides(shape = guide_legend(override.aes = list(size = 100)),
+         color = guide_legend(override.aes = list(size = 100))) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
         #        legend.position = "none")
-                legend.title = element_blank(), 
-                legend.text=element_text(size=4),
-                legend.position = c(0.95, 0.8))
+        legend.title = element_blank(), 
+        legend.text=element_text(size=4),
+        legend.position = c(0.95, 0.8))
 
 cols <- c("Mean"="black","10X"="maroon","30X"="seagreen1")
 plot3 <-  average_coverage_data2 %>%
-          select(Name, Average_coverage) %>%
-          na.omit() %>%
-          ggplot() +
-          geom_bar(aes(x = Name, y = Average_coverage), stat = "identity", alpha = 0.75, fill = "slategray3") +
-          ylab("Avg coverage") +
-          geom_errorbar(data=average_coverage_data2, aes(Name, ymax = mean_cov, ymin = mean_cov, colour="Mean"),
-                        size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
-          geom_errorbar(data=average_coverage_data2, aes(Name, ymax = tenx, ymin = tenx, colour="10X"),
-                        size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
-          geom_errorbar(data=average_coverage_data2, aes(Name, ymax = thirtyx, ymin = thirtyx, colour="30X"),
-                        size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
-          theme_minimal() +
-          scale_colour_manual(name="Error Bars",values=cols) + 
-          scale_fill_manual(name="Bar",values=cols) +
-          theme(axis.title.x = element_blank(),
-                axis.text.x = element_blank(),
-                legend.title = element_blank(), 
-                legend.text=element_text(size=4),
-                legend.position = c(0.90, 0.8))
+  select(Name, Average_coverage) %>%
+  na.omit() %>%
+  ggplot() +
+  geom_bar(aes(x = Name, y = Average_coverage), stat = "identity", alpha = 0.75, fill = "slategray3") +
+  ylab("Avg coverage") +
+  geom_errorbar(data=average_coverage_data2, aes(Name, ymax = mean_cov, ymin = mean_cov, colour="Mean"),
+                size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
+  geom_errorbar(data=average_coverage_data2, aes(Name, ymax = tenx, ymin = tenx, colour="10X"),
+                size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
+  geom_errorbar(data=average_coverage_data2, aes(Name, ymax = thirtyx, ymin = thirtyx, colour="30X"),
+                size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
+  theme_minimal() +
+  scale_colour_manual(name="Error Bars",values=cols) + 
+  scale_fill_manual(name="Bar",values=cols) +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        legend.title = element_blank(), 
+        legend.text=element_text(size=4),
+        legend.position = c(0.90, 0.8))
 
 plot4 <-  average_coverage_data2 %>%
-          select(Name, Reads) %>%
-          na.omit() %>%
-          ggplot() +
-          geom_bar(aes(x = Name, y = Reads), stat = "identity", alpha = 0.75, fill = "palevioletred2") +
-          ylab("# Reads") +
-          geom_errorbar(data=average_coverage_data2, aes(Name, ymax = mean_rd, ymin = mean_rd),
-                        size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
-          theme_minimal() +
-          theme(axis.title.x = element_blank())
+  select(Name, Reads) %>%
+  na.omit() %>%
+  ggplot() +
+  geom_bar(aes(x = Name, y = Reads), stat = "identity", alpha = 0.75, fill = "palevioletred2") +
+  ylab("# Reads") +
+  geom_errorbar(data=average_coverage_data2, aes(Name, ymax = mean_rd, ymin = mean_rd),
+                size=0.5, linetype = "longdash", inherit.aes = F, width = 1) +
+  theme_minimal() +
+  theme(axis.title.x = element_blank())
 
 # Finally we can plot all the 4 plots on top of each other and bask in the glory of R visualizations
 plot_grid(plot1, plot2, plot3, plot4, align = "v", ncol = 1, rel_heights = c(0.24, 0.24, 0.24, 0.28))
 dev.off()
+
+#Additionally you could print out the data to a csv file so you can compare it later 
+#(i.e. if you try different mapping options or different read trimming settings etc)
+write.table(average_coverage_data2, file = "Bowtie_average_data2.csv", append = FALSE, quote = TRUE, sep = ",",
+            eol = "\n", na = "NA", dec = ".", row.names = TRUE,
+            col.names = TRUE, qmethod = c("escape", "double"),
+            fileEncoding = "")
