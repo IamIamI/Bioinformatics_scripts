@@ -31,3 +31,14 @@ Example: Rscript /path/to/VCF_N_corrector.R file1.vcf file2.vcf fileN.vcf
 The output uses the orignal name and adds "Ncorrected." to it to identify this
 is the corrected file, and it saves the file in the same location as the original
 vcf.
+
+# Plot_coordinates_on_map.R
+A bare bones map for quick coordinate mapping, does not use any google map data etc, making it easy to use
+
+Use at your own perril, is only meant for small data, quick visualization, dirty plotting, and only meant to be used in R Studio with manual editing, no automation provided. 
+
+For nicer looking geo data plots, please refer to 
+https://www.lesleysitter.com/2019/08/22/plotting-geo-data/
+
+the code for which is stored on 
+https://github.com/IamIamI/pADAP_project/tree/master/geo_plotting_samples 
