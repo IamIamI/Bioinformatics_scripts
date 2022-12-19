@@ -9,6 +9,6 @@ If multiple dataset are stored in the same folder, it's easier to just store the
 otherwise this script would need more options and validation steps which make it less robust and more convoluted.
 
 The script is easily run as followed: 
-python ClonalFrameML_2_Gff.py /path/to/ClonalFrameML_output/
+python ClonalFrameML_2_Gff.py -r /path/to/ClonalFrameML_output/
 
 Output will be stored in the same directory as the input, the gff will be called ClonalFrameML.2.gff
