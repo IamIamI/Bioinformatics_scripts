@@ -90,7 +90,6 @@ def add_element(dict, key, value):
 # Function that process the newick files
 def process_newick(file_in_newick):
 	node_dict = {}
-#	try:
 	# Open the output and change the headers
 	file_open = open(file_in_newick, 'r').readline()
 	# For each nested phylog group (Sample:0.1, Sample:0.1)NODE_01
@@ -119,9 +118,6 @@ def process_newick(file_in_newick):
 			# If this name belonged to a node label ')Node_01' we'll change the dictionary
 			# kay to this name, so we can easily lookup later which samples are in this node
 			if node_trigger == True:
-				print (node_dict.keys())
-				print(list_pos[-1:][0])
-				print(sample_label)
 				node_dict[sample_label] = node_dict[list_pos[-1:][0]]
 				node_dict.pop(list_pos[-1:][0])
 				# We also now have to remove this group from our numerical list
@@ -151,11 +147,6 @@ def process_newick(file_in_newick):
 		else:
 			if label_trigger == True:
 				sample_label = (sample_label + char)
-#	except:
-#		print ("\nUnable to process ClonalFrameML's newick file. Check if file exists and"
-#				"and if it's in it's original format, editing of this file will result in"
-#				"incompatibility with this script\n")
-#		sys.exit(1) 
 	return(node_dict)
 	
 def process_imp_stat(file_in_imp_stat, options, node_dict):
@@ -169,8 +160,6 @@ def process_imp_stat(file_in_imp_stat, options, node_dict):
 		else:
 			line = lines.split('\t')
 			if "NODE" in lines: 
-				print (lines)
-				print (node_dict[line[0]])
 				gff_line = ("SEQUENCE\tClonalFrameML\tCDS\t" + line[1] + "\t" + line[2].strip() + "0.000\t.\t0\tID=\"" + line[0] + ":" + ','.join(node_dict[line[0]]) + "\"\n")
 				file_out.write(gff_line)
 			else:
@@ -202,7 +191,7 @@ def main():
 	process_imp_stat(file_in_imp_stat, options, node_dict)
 	
 	print ("\nOutput files should now be available in %s.\n"
-			"The output file is called 'clonalframeml.2.gff'" % (options.folder))
+			"The output file is called 'ClonalFrameML.2.gff'" % (options.folder))
 	sys.exit(1)
 
 if __name__ == "__main__":
