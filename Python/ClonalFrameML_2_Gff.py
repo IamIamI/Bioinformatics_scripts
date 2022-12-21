@@ -43,6 +43,14 @@ def option_parsing(argv):
 	return(options, remainder)
 
 def option_checker(options):
+	# Check if anyone provided the option -r with some directory location,
+	# if not, close the program. It needs a ClonalFrameML output directory to work
+	try:
+		len(options.folder)
+	except: 
+		print ("\nPlease provide a ClonalFrameML folder with the option -r \n")
+		sys.exit(1)
+		
 	# Handle the case if users added a backslash to their directory so we can 
 	# consistently deal with this
 	if options.folder.endswith("/"):
