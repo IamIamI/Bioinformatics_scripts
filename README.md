@@ -60,3 +60,14 @@ The script is easily run as followed:
 python ClonalFrameML_2_Gff.py /path/to/ClonalFrameML_output/
 
 Output will be stored in the same directory as the input, the gff will be called ClonalFrameML.2.gff
+
+# VCF_hetrozygous_positions_barplot
+This script is intended to run on a folder full of VCF's (if there is only one VCF in the folder that is fine too), and 
+report back the frequency of SNPs called with hetrozygous background noise. The intended purpose is to quickly analyze 
+background contamination in bacterial samples, and should off course not be used for eukaryotes or anything like such.
+
+This is a very basic python script with no userfriendly error handling or options. 
+The script is run as followed 
+python VCF_hetrozygous_positions_barplot.py </path/to/VCF_folder/>
+
+Output will be a file called "VCF_genotyped hetrozygous_loci_frequency.tsv" and will be stored in the same directory as where the script is run from. 
