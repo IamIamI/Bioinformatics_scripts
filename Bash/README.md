@@ -16,8 +16,8 @@ Usage:
 Exp_Desig_Extractor.sh [-g -b -c... -h ] [-g path/to/file ] [-c int]...
 This tool uses Samtools coverage, to determine which gff features were present in any given dataset
 based on BAM alignment. 
-	-g			Gff-file input [path/to/file]
-	-b			Bam file input [path/to/file]
-	-c			Coverage threshold, regions below this number will be ignored
-	--genesonly		Only look at gene features, ignore all other features
-	-h | --help		Display help
+&emsp;	-g&emsp;			Gff-file input [path/to/file]
+&emsp;	-b&emsp;		Bam file input [path/to/file]
+&emsp;	-c&emsp;			Coverage threshold, regions below this number will be ignored
+&emsp;	--genesonly&emsp;	Only look at gene features, ignore all other features
+&emsp;	-h | --help&emsp;		Display help
