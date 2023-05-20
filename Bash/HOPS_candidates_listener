@@ -1,0 +1,229 @@
+#!/bin/bash
+
+#############
+# Creator: Lesley Sitter
+# E-mail: lesleysitter@hotmail.com
+# Version: v1.0
+# Creation date: 20-MAY-2023
+#############
+
+#this is a hardcoded path to the current location of HOPS output from the automatic screening. If this folder in the future changes
+# this variables also needs to be changed
+HOPS_OUTPUT_PATH="/mnt/archgen/pathogen_resources/screening/Autorun_deepscreening/eager_outputs/Bacterial_Viral_Prescreening/No_Pathogen_Capture/*/maltextract/results/pdf_candidate_profiles"
+sites="*";
+site_subset=false;
+SEND_PDF=true;
+
+# This is an overview of the help function which will show some information on the different 
+# functions this script has available and how to use them.
+show_help() {
+cat << EOF
+Usage: ${0##*/} [-e -c -o -h ] [-e your@eva.mpg.de ] [-c your@eva.mpg.de,their@eva.mpg.de,etc@eva.mpg.de ]
+			  [-o yersinia_pestis,mycobacterium_tuberculosis,borrelia,etc ]
+				
+This listener script runs forever, checks for new hops output for organisms of interest.
+To stop the script simply press the q button.
+
+based on automatic bacterial and viral screening pipeline output.
+	-e		Specify the e-mail of whoever needs to be notified with the EVA MPI group. 
+	-c		One or more e-mail adresses (seperated with a comma) that will be 
+			cc'd additionally to the -e e-mail
+				example: -c my@eva.mpg.de,your@eva.mpg.de,their@eva.mpg.de
+	-o		Define the organism you want to check, you can seperate organisms with a comma.
+			Make sure there are no spaces and that seperations are done with an underscore.
+			Also make sure that you use the names that hops outputs otherwise it will not 
+			generate any notifications.
+				example: -o treponema_pallidum,yersinea_pestis, ... ,spider_monkey
+	-s		Site codes, use this if you only want to listen for specific results from
+			a particular site. To look at multiple, separate with a comma. 
+				example: -s GAP009,JUC013,MXV001,etc
+	-p		The default behaviour of this script is to send candidate PDFs directly to
+			an e-mail adress. If instead you prefer the full paths to these files instead
+			of the actual files, just add the option -p
+	-h | --help	Display help
+	
+EOF
+}
+
+##########################################################################################################
+# Command line argument parsing is done here mostly using binary switches
+##########################################################################################################
+while :; do
+	case "$1" in
+	# First check whether an e-mail adress was provided
+	-e)
+		if [ "$2" ] && [[ ! $2 == -* ]]; then
+			if [[ $2 == *"@"* ]] && [[ $2 == *"eva.mpg.de" ]]; then
+				echo -ne "The recipient of pathogen updates is set to : ${2}\n\n";
+				mail_adress=${2};
+			elif [[ ! $2 == *"eva.mpg.de" ]]; then
+				echo "It appears you are trying to specify an external recipient.";
+				echo -ne "this is not allowed atm.\n\n"
+				exit 1
+			else
+				echo "It appears the e-mail specified with -e [your@eva.mpg.de],";
+				echo -ne "did not conform to e-mail standards, please check for correct spelling.\n\n";
+				exit 1
+			fi
+			shift
+		else
+			echo "No recipient e-mail has been specified with -e, please rerun";
+			echo -ne "the command and specify one with the -e [your@eva.mpg.de] option.\n\n";
+			exit 1
+		fi
+		;;
+	# First check whether additional cc'd mails were provided
+	-c)
+		if [ "$2" ] && [[ ! $2 == -* ]]; then
+			cc_mail_adress=$2;
+			mail_check=(${cc_mail_adress//,/ });
+			for mails in ${mail_check[@]}; do
+				if [[ ! $mails == *"eva.mpg.de" ]]; then
+					echo "It appears you are trying to cc an external recipient.";
+					echo -ne "this is not allowed atm.\n\n"
+					exit 1
+				elif [[ ! $mails == *"@"* ]] ; then
+					echo "It appears the e-mail specified with -c $mails,";
+					echo -ne "did not conform to e-mail standards, please check for correct spelling\n\n";
+					exit 1
+				fi
+				shift
+			done
+		else
+			continue
+		fi
+		;;
+	# Check whether any organisms were provided to listen for
+	-o)
+		if [ "$2" ] && [[ ! $2 == -* ]]; then
+			if [ -n "$2" ]; then
+				echo "The script will listen for candidate hops output for the following organisms: ";
+				targets=$2;
+				targets=(${targets//,/ });
+				for species in ${targets[@]}; do
+					echo ${species};
+				done
+				echo -ne "\n";
+			else
+				echo "No species were provided to check for.";
+				echo -ne "Please provide species of interest using option -o .\n\n";
+				exit 1
+			fi
+		shift
+		fi
+		;;
+	# Check whether any specific sites were provided to listen for
+	-s)
+		if [ "$2" ] && [[ ! $2 == -* ]]; then
+			if [ -n "$2" ]; then
+				site_subset=true;
+				echo "The script will only listen for candidate hops output from the following sites: ";
+				sites=$2;
+				sites=(${sites//,/ });
+				for site in ${sites[@]}; do
+					echo ${site};
+				done
+				echo -ne "\n";
+			else
+				echo "No sites were provided to check for. Please provide sites";
+				echo "of interest using option -s. or don't use option -s";
+				echo -ne "if you want to look at all sites.\n\n";
+				exit 1
+			fi
+		shift
+		fi
+		;;
+	# help function which invokes the help/man info and pushes it to STDout
+	-p) 
+		SEND_PDF=false;
+		;;
+	# help function which invokes the help/man info and pushes it to STDout
+	-h|--help) 
+		show_help >&2
+		exit 1
+		;;
+	*)
+		break
+	esac
+	shift
+done
+
+# There are two manditory options, if either isnt filled in the script stops. 
+if [ -z "${mail_adress}" ]; then
+	echo "No recipient e-mail has been specified with -e, please rerun";
+	echo -ne "the command and specify one with the -e [your@eva.mpg.de] option.\n\n";
+	exit 1
+fi
+if [[ -z "${targets}" || -z ${sites} ]]; then
+	echo "No species or sites were provided to check for.";
+	echo -ne "Please provide species or sites of interest using option -o .\n\n";
+	exit 1
+fi
+if [ $SEND_PDF ]; then
+	echo "PDF's will now be send to ${mail_adress}";
+else
+	echo "PATHs to PDF candidate files will now be send to ${mail_adress}";
+fi
+
+# Just print a message so people know you can quit the script
+echo -ne "\n\nTo stop checking, press control+c to exit.\n\n"
+
+# Now the script will run forever unless the q is pressed
+while true; do
+	# For each cycle, which i set to 1 day (think that is more than enough right?)
+	# the script will check for files that are less than mtime -1 (24hr*1) old, 
+	# in the sub sub sub folder of the hops output
+	for organism in ${targets[@]};do
+		candidate_file=();
+		# If the user set some specific sites to look for
+		if [ ${site_subset} = true ];then
+			# For each of their specified sites
+			for site in ${sites[@]}; do
+				# Go through all the files that match the criteria of being less than 24hr old, 
+				# having the sitename, ending with a .pdf, in the folder of the organism of interest.
+				list=$(ls ${HOPS_OUTPUT_PATH}/*${organism}*/*${site}*.pdf 2>/dev/null)
+				if [ -n "${list}" ];then
+					for file in $list; do
+						candidate_file+=( $(find $file -type f -mtime -1) )
+					done
+				fi
+			done
+		else
+			list=$(ls ${HOPS_OUTPUT_PATH}/${organism}*/*.pdf 2>/dev/null)
+			if [ -n "${list}" ];then
+				for file in $list; do
+					candidate_file+=( $(find $file -type f -mtime -1) )
+				done
+			fi
+		fi
+		# If the candidate_file is not empty
+		if [ -n "${candidate_file}" ];then
+			# Now convert the array into a string of files, each seperated by an -a, as this is the identifier for mutt that 
+			# you want to attatch a file. 
+			if [ $SEND_PDF ]; then
+				printf -v candidate_files ' -a %s' "${candidate_file[@]}"
+				# If there are no additional emails provided to cc, then it will just mail 
+				if [ -z "${mail_adress}" ]; then
+					echo "A positive candidate for ${organism} was found." | mutt -s "CandidateID - ${organism}"${candidate_files} -- ${mail_adress}
+				else
+					# If additional e-mails are provided with the -c option, then we need to also mail them
+					printf -v cc_mail ', %s' "${cc_mail_adress[@]}"
+					cc_mail=${cc_mail:1}
+					echo "A positive candidate for ${organism} was found." | mutt -s "CandidateID - ${organism}"${candidate_files} -- ${mail_adress} -c "${cc_mail}"
+				fi
+			else
+				candidate_files=$(printf '%s\n' "${candidate_file[@]}")
+				if [ -z "${mail_adress}" ]; then
+					echo "A positive candidate for ${organism} was found.\n${candidate_files}" | mutt -s "CandidateID - ${organism}${candidate_files}" -- ${mail_adress}
+				else
+					# If additional e-mails are provided with the -c option, then we need to also mail them
+					printf -v cc_mail ', %s' "${cc_mail_adress[@]}"
+					cc_mail=${cc_mail:1}
+					echo "A positive candidate for ${organism} was found.\n${candidate_files}" | mutt -s "CandidateID - ${organism}"${candidate_files} -- ${mail_adress} -c "${cc_mail}"
+				fi
+			fi
+		fi
+	done
+	sleep 1d
+done
+
