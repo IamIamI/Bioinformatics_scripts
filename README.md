@@ -11,7 +11,7 @@ the process, you are doing 2 runs of 50 samples each. This results in 2 files.
 The script is easy to use, just copy all the RunSummary.txt files from the HOPS 
 output, into the same director. And give that directory to the script. 
 just invoke it as following
-Rscript Merge_files.R /path/to/your/directory/
+```Rscript Merge_files.R /path/to/your/directory/```
 
 
 ## VCF_N_Corrector.R
@@ -30,7 +30,7 @@ Cases that are not handled:
 
 Script usage should be easy, just invoke Rscript, type the script location and
 add the vcf files you want to correct
-Example: Rscript /path/to/VCF_N_corrector.R file1.vcf file2.vcf fileN.vcf
+Example: ```Rscript /path/to/VCF_N_corrector.R file1.vcf file2.vcf fileN.vcf```
 
 The output uses the orignal name and adds "Ncorrected." to it to identify this
 is the corrected file, and it saves the file in the same location as the original
@@ -57,7 +57,7 @@ If multiple dataset are stored in the same folder, it's easier to just store the
 otherwise this script would need more options and validation steps which make it less robust and more convoluted.
 
 The script is easily run as followed: 
-python ClonalFrameML_2_Gff.py /path/to/ClonalFrameML_output/
+```python ClonalFrameML_2_Gff.py /path/to/ClonalFrameML_output/```
 
 Output will be stored in the same directory as the input, the gff will be called ClonalFrameML.2.gff
 
@@ -68,7 +68,7 @@ background contamination in bacterial samples, and should off course not be used
 
 This is a very basic python script with no userfriendly error handling or options. 
 The script is run as followed 
-python VCF_hetrozygous_positions_barplot.py </path/to/VCF_folder/>
+```python VCF_hetrozygous_positions_barplot.py </path/to/VCF_folder/>```
 
 Output will be a file called "VCF_genotyped hetrozygous_loci_frequency.tsv" and will be stored in the same directory as where the script is run from. 
 
@@ -127,11 +127,12 @@ You also need to have samtools coverage installed / in your PATH to work. It nee
 functionality to work, which was introduced in 1.12 i think?
   
 Usage as followed:\
-Exp_Desig_Extractor.sh [-g -b -c... -h ] [-g path/to/file ] [-c int]...\
+```Exp_Desig_Extractor.sh [-g -b -c... -h ] [-g path/to/file ] [-c int]...\
 This tool uses Samtools coverage, to determine which gff features were present in any given dataset\
 based on BAM alignment.\
 &emsp;	-g&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;			Gff-file input [path/to/file]\
 &emsp;	-b&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;		Bam file input [path/to/file]\
 &emsp;	-c&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;			Coverage threshold, regions below this number will be ignored\
+```
 &emsp;	--genesonly&emsp;&emsp;	 Only look at gene features, ignore all other features\
 &emsp;	-h | --help&emsp;&emsp;&emsp;		Display help
