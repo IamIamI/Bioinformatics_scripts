@@ -8,13 +8,13 @@
 # Description: Used to mask thymine and adenine sites in ancient SAM/BAM files created from single stranded libraries, to prevent damage from being incorporated into genotyping.
 
 # Usability: When setting to hardmasking, al T's on the forward strand and all A's on the reverse strand are masked regardless of anything else
-# Example: python SSLIB_Masker.py --input_file Sample.processed.bam --masking R --ref_file Reference.fasta --output_file Sample_RefGuidedmasked.bam
+# Example: python SSLib_Masker.py --input_file Sample.processed.bam --masking R --ref_file Reference.fasta --output_file Sample_RefGuidedmasked.bam
 # Usability: When setting the script to Reference guided masking, all T's on the forward strand are masked if the reference has a C, and all A's on the reverse strand will be masked if the reference has a G on that position
-# Example: pythonSSLIB_Masker.py --input_file Sample.processed.bam --masking H --output_file Sample_Hardmasked.bam
+# Example: pythonSSLib_Masker.py --input_file Sample.processed.bam --masking H --output_file Sample_Hardmasked.bam
 # Usability: When using edge masking, only T's on the 5' and 3' of the forward read are masked, and only A's on 5' and 3' of the reverse strand will be masked, the user can specify how many bases into these edges the masking runs.
-# Example: python SSLIB_Masker.py --input_file Sample.processed.bam --masking E --edge_count 3 --output_file Sample_Edgemasked.bam
+# Example: python SSLib_Masker.py --input_file Sample.processed.bam --masking E --edge_count 3 --output_file Sample_Edgemasked.bam
 # Optional: The user can also remove reads that are too short (default 0bp), or are not mapping with a high enough MapQ score (default 0)
-# Example: python SSLIB_Masker.py --input_file Sample.processed.bam --output_file Sample_Hardmasked_Filtered.bam --mapq_cutoff 37 --len_cutoff 25
+# Example: python SSLib_Masker.py --input_file Sample.processed.bam --output_file Sample_Hardmasked_Filtered.bam --mapq_cutoff 37 --len_cutoff 25
 
 # Comment: Use at your own discression, created for personal use
 #
