@@ -25,9 +25,11 @@ python VCF_hetrozygous_positions_barplot.py </path/to/VCF_folder/>
 Output will be a file called "VCF_genotyped hetrozygous_loci_frequency.tsv" and will be stored in the same directory as where the script is run from. 
   
 # SSLib_Masker
-This script can mask forward strand 'T' and reverse strand 'A' in Sam/Bam files. The intended goal is to mask ancient "damage" (deaminated cytosines) to prevent damage from appearing as biological genotypes.
+The script is written for Python 3 and uses the biopython and pysam libraries which can easily be installed by running ```pip install biopython``` and ```pip install pysam``` or using a conda environment.  
+
+This script can mask forward strand 'T' and reverse strand 'A' in Sam/Bam files. The intended goal is to mask ancient "damage" (deaminated cytosines) from singe stranded (SS) libraries.to prevent damage from appearing as biological genotypes.  
   
-sites from singe stranded (SS) libraries. Since the single stranded libraries are not synthetically amplified yet, they are assumed to not have artefactually complemented 'C'>'T'>'A' changes, and instead only have natural deamination artefacts. This means it's possible to mask elements that appear as damage based on the strand that exhibits it.  
+Since the single stranded libraries are not synthetically amplified yet, they are assumed to not have artefactually complemented 'C'>'T'>'A' changes, and instead only have natural deamination artefacts. This means it's possible to mask elements that appear as damage based on the strand that exhibits it.  
   
 There are three approaches, the most logical is to mask all the 'T' on the forward strand and the 'A' on the reverse strand as we cannot determine which 'T' are biological and which artefactual.  
 The second approach is a reference guide approach where we also supply the reference genome to which the reads were mapped, and we only mask 'T' on the forward strand if the reference sequence has a 'C', and mask the 'A' on the reverse strand if the reference sequence has a 'G'. Although here we assume to know which nucleotides are damage, and will also delete biological C>T, the forward strand 'A' and reverse strand 'T' will still be able to corroborate the genotype if it's biological. Although we do expect that 'C'>'T'/'G'>'A' sites will drop substatially in coverage compared to all other sides, and with low coverage samples might result in a bias during SNP calling.  
