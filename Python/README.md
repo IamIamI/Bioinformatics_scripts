@@ -24,7 +24,7 @@ python VCF_hetrozygous_positions_barplot.py </path/to/VCF_folder/>
   
 Output will be a file called "VCF_genotyped hetrozygous_loci_frequency.tsv" and will be stored in the same directory as where the script is run from. 
   
-# SSlib_Masker
+# SSLib_Masker
 This script can mask forward strand 'T' and reverse strand 'A' in Sam/Bam files. The intended goal is to mask ancient "damage" (deaminated cytosines) to prevent damage from appearing as biological genotypes.
   
 sites from singe stranded (SS) libraries. Since the single stranded libraries are not synthetically amplified yet, they are assumed to not have artefactually complemented 'C'>'T'>'A' changes, and instead only have natural deamination artefacts. This means it's possible to mask elements that appear as damage based on the strand that exhibits it.  
@@ -38,18 +38,18 @@ Masking just replaces the nucleotide with an 'N' which does not affect GATK's Un
   
 This script has error handling for most thinkable scenario's and should be relatively easy to run as followed:
 - Use case: When setting to hardmasking, al T's on the forward strand and all A's on the reverse strand are masked regardless of anything else  
-Example: ```python SSLIB_Masker.py --input_file Sample.processed.bam --masking R --ref_file Reference.fasta --output_file Sample_RefGuidedmasked.bam```  
+Example: ```python SSLib_Masker.py --input_file Sample.processed.bam --masking R --ref_file Reference.fasta --output_file Sample_RefGuidedmasked.bam```  
   
 - Use case: When setting the script to Reference guided masking, all T's on the forward strand are masked if the reference has a C, and all A's on the reverse strand will be masked if the reference has a G on that position  
-Example: ```python SSLIB_Masker.py --input_file Sample.processed.bam --masking H --output_file Sample_Hardmasked.bam```  
+Example: ```python SSLib_Masker.py --input_file Sample.processed.bam --masking H --output_file Sample_Hardmasked.bam```  
   
 - Use case: When using edge masking, only T's on the 5' and 3' of the forward read are masked, and only A's on 5' and 3' of the reverse strand will be masked, the user can specify how many bases into these edges the masking runs.  
-Example: ```python SSLIB_Masker.py --input_file Sample.processed.bam --masking E --edge_count 3 --output_file Sample_Edgemasked.bam```  
+Example: ```python SSLib_Masker.py --input_file Sample.processed.bam --masking E --edge_count 3 --output_file Sample_Edgemasked.bam```  
   
 - Use case: The user can also remove reads that are too short (default 0bp), or are not mapping with a high enough MapQ score (default 0)  
-Example: ```python SSLIB_Masker.py --input_file Sample.processed.bam --output_file Sample_Hardmasked_Filtered.bam --mapq_cutoff 37 --len_cutoff 25```  
+Example: ```python SSLib_Masker.py --input_file Sample.processed.bam --output_file Sample_Hardmasked_Filtered.bam --mapq_cutoff 37 --len_cutoff 25```  
   
-The sofware has an overview of all options which can be called upon by typing 'python SSLIB_Masker.py -h' or 'python SSLIB_Masker.py --help'  
+The sofware has an overview of all options which can be called upon by typing 'python SSLib_Masker.py -h' or 'python SSLib_Masker.py --help'  
   
 An overview of the options are as followed:  
 ```
