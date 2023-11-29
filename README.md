@@ -74,6 +74,7 @@ Output will be a file called "VCF_genotyped hetrozygous_loci_frequency.tsv" and 
 
 # SSLib_Masker
 This script can mask forward strand 'T' and reverse strand 'A' in Sam/Bam files. The intended goal is to mask ancient "damage" (deaminated cytosines) to prevent damage from appearing as biological genotypes.
+The script is written for Python 3 and uses the biopython and pysam libraries which can easily be installed by running ```pip install biopython``` and ```pip install pysam``` or using a conda environment.  
   
 sites from singe stranded (SS) libraries. Since the single stranded libraries are not synthetically amplified yet, they are assumed to not have artefactually complemented 'C'>'T'>'A' changes, and instead only have natural deamination artefacts. This means it's possible to mask elements that appear as damage based on the strand that exhibits it.  
   
