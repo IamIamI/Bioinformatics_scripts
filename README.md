@@ -127,12 +127,11 @@ You also need to have samtools coverage installed / in your PATH to work. It nee
 functionality to work, which was introduced in 1.12 i think?
   
 Usage as followed:\
-```Exp_Desig_Extractor.sh [-g -b -c... -h ] [-g path/to/file ] [-c int]...\
+Exp_Desig_Extractor.sh [-g -b -c... -h ] [-g path/to/file ] [-c int]...\
 This tool uses Samtools coverage, to determine which gff features were present in any given dataset\
 based on BAM alignment.\
 &emsp;	-g&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;			Gff-file input [path/to/file]\
 &emsp;	-b&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;		Bam file input [path/to/file]\
 &emsp;	-c&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;			Coverage threshold, regions below this number will be ignored\
-```
 &emsp;	--genesonly&emsp;&emsp;	 Only look at gene features, ignore all other features\
 &emsp;	-h | --help&emsp;&emsp;&emsp;		Display help
