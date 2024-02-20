@@ -45,7 +45,7 @@ https://github.com/IamIamI/pADAP_project/tree/master/geo_plotting_samples
 
 # Postprocessing.AMPS_deconstruct.r
 
-* EXPERIMENTAL: USE AT OWN RISK * it has only been written in a day, and tested in a small test set. 
+**EXPERIMENTAL: USE AT OWN RISK** it has only been written in a day, and tested in a small test set. 
 
 This is a "reduced" version of the AMPS/Hops R script created by https://github.com/rhuebler/HOPS/
 
