@@ -45,6 +45,8 @@ https://github.com/IamIamI/pADAP_project/tree/master/geo_plotting_samples
 
 # Postprocessing.AMPS_deconstruct.r
 
+* EXPERIMENTAL: USE AT OWN RISK * it has only been written in a day, and tested in a small test set. 
+
 This is a "reduced" version of the AMPS/Hops R script created by https://github.com/rhuebler/HOPS/
 
 This version has removed the plotting functionalities and insteads opts to output all the data to a .csv file for large scale data analysis.
@@ -56,4 +58,4 @@ Although this will create a lot of samples that look positive, this can be overc
 The reasoning is that this is needed to make large scale data analysis possible as it now reduces all the taxa of interested to one line instead of several lines. 
 Although having several lines for a single genus or species would not be problamatic, if one is to analyze 1000 taxa for 10K samples, the data is already very large, and additional lines are going to clutter it even more, especially for organisms that have a high abundance of data available with minimal variation. 
 
-* USE AT OWN RISK * it has only been written in a day, and tested in a small test set. 
+
