@@ -65,3 +65,6 @@ options:
   -o , --output_file   Output SAM file with modified reads (default: 'output_modified.sam')
   -h, --help           Show this help message and exit.
 ```
+
+An overview of the expected results of each method
+![alt text](ssLib_masker.png)
