@@ -67,4 +67,4 @@ options:
 ```
 
 An overview of the expected results of each method
-![alt text](https://github.com/IamIamI/Bioinformatics_scripts/edit/master/Python/ssLib_masker.jpg)
+![alt text](https://github.com/IamIamI/Bioinformatics_scripts/blob/master/Python/ssLib_masker.jpg)
