@@ -113,7 +113,9 @@ options:
   -o , --output_file   Output SAM file with modified reads (default: 'output_modified.sam')
   -h, --help           Show this help message and exit.
 ```
-  
+An overview of the expected results of each method
+![alt text](https://github.com/IamIamI/Bioinformatics_scripts/edit/master/Python/ssLib_masker.jpg)
+
   
 # BASH scripts 
 ## Exp_Desig_Extractor.sh
