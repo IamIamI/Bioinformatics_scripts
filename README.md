@@ -114,7 +114,7 @@ options:
   -h, --help           Show this help message and exit.
 ```
 An overview of the expected results of each method
-![](https://github.com/IamIamI/Bioinformatics_scripts/edit/master/Python/ssLib_masker.jpg)
+![](https://github.com/IamIamI/Bioinformatics_scripts/blob/master/Python/ssLib_masker.jpg)
 
   
 # BASH scripts 
