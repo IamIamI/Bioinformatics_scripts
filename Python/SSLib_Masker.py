@@ -38,14 +38,14 @@ import argparse
 try:
 	import pysam
 except ImportError:
-	print("\nError: This script requires pysam to be installed. Try \'pip3 install pysam\' to install it.\n\n")
+	print("\nError: This script requires pysam to be installed.\nTry \'pip install pysam\' or \'pip3 install pysam\' (depending on your setup) to install it.\n\n")
 	sys.exit(1)
 
 # Check if the pysam library is installed
 try:
 	from Bio import SeqIO
 except ImportError:
-	print("\nError: This script requires biopython to be installed. Try \'pip3 install biopython\' to install it.\n\n")
+	print("\nError: This script requires biopython to be installed.\nTry \'pip install biopython\' or \'pip3 install biopython\' (depending on your setup) to install it.\n\n")
 	sys.exit(1)
 
 # Determine if a bam or sam is provided
