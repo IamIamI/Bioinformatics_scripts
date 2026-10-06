@@ -21,18 +21,3 @@ based on BAM alignment.\
 &emsp;	--genesonly&emsp;&emsp;	 Only look at gene features, ignore all other features\
 &emsp;	-h | --help&emsp;&emsp;&emsp;		Display help
 
-# The MEAP Pipeline v1.1.2
-This pipeline was developed in 2020 at the Moura research group at the University of Gdańsk and previously the \
-Muzeum i Instytut Zoologii PAN in Poland. The purpose for this pipeline is to create a user friendly \
-and reproducible pipeline that can employ publically available algorithms and tools, to analyze \
-de novo exome NGS data. The script was designed as part of the SONATA 2018/31/D/NZ8/02835 project funded \
-by the Polish NCN, focused on analysing temporal patterns of immune system genes in \
-Mediterranean striped dolphin (Stenella coeruleoalba)
-
-This pipeline serves as a shell around pre-existing tools and should be used as such. \
-It has been tested on the system used for the project, but we cannot guaranteed compatibility \
-with all systems. Certain settings are predefined by the project for which this tool was created, \
-however due to the accessibility of bash scripting users can easily change settings for each tool and step. \
-If you do use this script, please consider citing the following publication: Moura et al XXXXX
-
-The MEAP.README contains further instructions on the tools, settings, expected data inputs and expected outputs.
